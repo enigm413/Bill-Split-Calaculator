@@ -22,21 +22,34 @@ const initialFriends = [
   },
 ];
 
+//Define Reusable Button Component
+function Button({ children, onClick }) {
+  return (
+    <button className="button" onClick={onClick}>
+      {children}
+    </button>
+  );
+}
+
 //Define Main App Component
 export default function App() {
+  const [isFriendForm, setIsFriendForm] = useState(false);
   const [updatedFriends, setUpdatedFriends] = useState(initialFriends);
 
   // Function to add friends
   function handleAddFriend(friend) {
     setUpdatedFriends((initialFriends) => [...initialFriends, friend]);
+    setIsFriendForm(false);
   }
 
   return (
     <div className="app">
       <div className="sidebar">
         <FriendList updatedFriends={updatedFriends} />
-        <FriendForm onAddFriend={handleAddFriend} />
-        <Button>Close</Button>
+        {isFriendForm && <FriendForm onAddFriend={handleAddFriend} />}
+        <Button onClick={() => setIsFriendForm(!isFriendForm)}>
+          {isFriendForm === false ? "Add Friend" : "Close"}
+        </Button>
       </div>
       <SplitBillForm />
     </div>
@@ -126,11 +139,6 @@ function FriendForm({ onAddFriend }) {
       <Button>Add</Button>
     </form>
   );
-}
-
-//Define Button Component
-function Button({ children }) {
-  return <button className="button">{children}</button>;
 }
 
 //Define Split Bill Component
